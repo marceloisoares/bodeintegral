@@ -1,0 +1,1141 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../../../../img/waveform.svg">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.26">
+    
+    
+      
+        <title>Matlab scripting guidelines - Bode integral</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#matlab-scripting-guidelines" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Bode integral" class="md-header__button md-logo" aria-label="Bode integral" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m22 12-2 1-1 1-1-1-1 3-1-3-1 8-1-8-1 2-1-2-1 4-1-4-1 9-1-9-1 6-1-6-1 1-1-1-2-1 2-1 1-1 1 1 1-6 1 6 1-9 1 9 1-4 1 4 1-2 1 2 1-8 1 8 1-3 1 3 1-1 1 1 2 1Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Bode integral
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Matlab scripting guidelines
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../../projects/Project1_msim/" class="md-tabs__link">
+          
+  
+  Projects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../" class="md-tabs__link">
+          
+  
+  Blog
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../about/" class="md-tabs__link">
+        
+  
+    
+  
+  About
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Bode integral" class="md-nav__button md-logo" aria-label="Bode integral" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m22 12-2 1-1 1-1-1-1 3-1-3-1 8-1-8-1 2-1-2-1 4-1-4-1 9-1-9-1 6-1-6-1 1-1-1-2-1 2-1 1-1 1 1 1-6 1 6 1-9 1 9 1-4 1 4 1-2 1 2 1-8 1 8 1-3 1 3 1-1 1 1 2 1Z"/></svg>
+
+    </a>
+    Bode integral
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Projects
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Projects
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/Project1_msim/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    mSim: Simulation framework
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/Project2_propeller/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Propeller
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../projects/Project3_p51/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    P51 mustang
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Index
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Archive
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2024/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2024
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../about/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code layout
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      Naming convention
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#function-arguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function arguments:
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5v-5Z"/></svg>
+                        <time datetime="2024-06-17 00:00:00" class="md-ellipsis">June 17, 2024</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7h1.5Z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              15 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+
+
+<h1 id="matlab-scripting-guidelines">Matlab scripting guidelines</h1>
+<h2 id="introduction">Introduction</h2>
+<p>This style guide introduces the preferred coding conventions for Matlab scripting used by this blog. </p>
+<!-- more -->
+
+<h2 id="code-layout">Code layout</h2>
+<p><strong>Maximum line length:</strong></p>
+<ul>
+<li>Avoid exceeding a maximum number of 79 characters;</li>
+<li>Consider using line continuation for long command lines;</li>
+</ul>
+<p><strong>Indentation:</strong></p>
+<ul>
+<li>Use 4 spaces per indentation level</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Indentation (Example 1)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">[</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">out2</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">myFunction</span><span class="p">(</span><span class="n">argA</span><span class="p">,</span><span class="w"> </span><span class="n">argB</span><span class="p">,</span><span class="w"> </span><span class="n">argC</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">argA</span><span class="p">)</span>
+<span class="w">        </span><span class="n">out1</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">argB</span><span class="p">;</span>
+<span class="w">        </span><span class="n">out2</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">argC</span><span class="p">;</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></td></tr></table></div>
+<p>If the function call results in a long statement, consider aligning inputs/outputs arguments to avoid exceeding 79 characters:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Indentation (Example 2)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">foo</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">funcWithVeryLongName</span><span class="p">(</span><span class="n">argA</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                           </span><span class="n">argB</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                           </span><span class="n">argC</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Indentation (Example 3)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">[</span><span class="n">outLongVar1</span><span class="p">,</span><span class="k">...</span>
+<span class="w">        </span><span class="n">out2</span><span class="p">,</span><span class="k">...</span>
+<span class="w">    </span><span class="n">outName3</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">funcWithVeryLongName</span><span class="p">(</span><span class="n">argA</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                                     </span><span class="n">argB</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                                     </span><span class="n">argC</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p>If the statement is very long, consider aligning operators to avoid exceeding 79 characters:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Indentation (Example 4)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">operatorA</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">operatorB</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">...</span>
+<span class="w">                      </span><span class="n">operatorC</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">...</span>
+<span class="w">                      </span><span class="n">operatorD</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Blank lines</strong></p>
+<ul>
+<li>Use blank lines in functions, sparingly, to indicate logical sections.</li>
+</ul>
+<p><strong>White space</strong></p>
+<ul>
+<li>General rule: After commas, around operators.</li>
+</ul>
+<p><strong>Operator precedence</strong></p>
+<ul>
+<li>Consider using parenthesis to organize logical statements.</li>
+</ul>
+<p><strong>Imports</strong></p>
+<p>Sometimes function calls can get very long, especially if the function is within a namespace:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Imports (Example 1)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="p">[</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">out2</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">namespaceA</span><span class="p">.</span><span class="n">subNamespace</span><span class="p">.</span><span class="n">functionName</span><span class="p">(</span><span class="n">argA</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                                                    </span><span class="n">argB</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p>If that is the case, consider importing it in a separate line;
+Make the import close to where it is used;</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Imports (Example 2)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">import</span><span class="w"> </span><span class="n">namespaceA</span><span class="p">.</span><span class="n">subNamespace</span><span class="p">.</span><span class="n">functionName</span>
+<span class="p">[</span><span class="n">out1</span><span class="p">,</span><span class="w"> </span><span class="n">out2</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">functionName</span><span class="p">(</span><span class="n">argA</span><span class="p">,</span><span class="n">argB</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Comments</strong></p>
+<ul>
+<li>Use comments to explain "why", not "how";</li>
+<li>Make "what" and "how" explicit using the code itself;</li>
+<li>Use inline comments sparingly:<ul>
+<li>They are distracting - but sometimes necessary;</li>
+<li>Align comments to improve readability;</li>
+</ul>
+</li>
+<li>The best comment is a code that explains itself;</li>
+<li>Use %% to group logical section;</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Comments (Could be better)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">a</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span><span class="w"> </span><span class="c">% Acceleration in m/s2</span>
+<span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span><span class="w"> </span><span class="c">% Mass in kg</span>
+<span class="n">m</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="c">% Force in Newtons</span>
+<span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">a</span>^<span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span>^<span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"> </span><span class="c">% Random equation</span>
+</code></pre></div></td></tr></table></div>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Comments (More appropriate)</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c">% Force using Second Newton&#39;s law:</span>
+<span class="n">force_N</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">mass_kg</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">accel_mps2</span><span class="p">;</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="naming-convention">Naming convention</h2>
+<p><strong>Style</strong></p>
+<ul>
+<li>Constants:<ul>
+<li>UPPER_CASE_WITH_UNDERSCORE</li>
+</ul>
+</li>
+<li>Functions (camelCase):<ul>
+<li>getNumberPages</li>
+</ul>
+</li>
+<li>Classes (CamelCase):<ul>
+<li>TestCaseWrapper</li>
+</ul>
+</li>
+<li>Objects(CamelCase):<ul>
+<li>MyObject</li>
+</ul>
+</li>
+<li>Packages:<ul>
+<li>packagesname</li>
+</ul>
+</li>
+<li>Engineering variables:<ul>
+<li>varName_unit</li>
+</ul>
+</li>
+</ul>
+<p><strong>Units</strong></p>
+<p>Indicate units explicity:</p>
+<ul>
+<li>force_N;</li>
+<li>mass_kg;</li>
+<li>accel_mps2;</li>
+<li>vel_mps;</li>
+<li>dist_m;   </li>
+</ul>
+<p>Used more often:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Unit</th>
+<th style="text-align: center;">Suffix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">degree</td>
+<td style="text-align: center;">_deg</td>
+</tr>
+<tr>
+<td style="text-align: center;">degree per second</td>
+<td style="text-align: center;">_degs</td>
+</tr>
+<tr>
+<td style="text-align: center;">feet</td>
+<td style="text-align: center;">_ft</td>
+</tr>
+<tr>
+<td style="text-align: center;">hertz</td>
+<td style="text-align: center;">_hz</td>
+</tr>
+<tr>
+<td style="text-align: center;">kilograms</td>
+<td style="text-align: center;">_kg</td>
+</tr>
+<tr>
+<td style="text-align: center;">knot</td>
+<td style="text-align: center;">_kt</td>
+</tr>
+<tr>
+<td style="text-align: center;">meter</td>
+<td style="text-align: center;">_m</td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(m/s\)</span></td>
+<td style="text-align: center;">_mps</td>
+</tr>
+<tr>
+<td style="text-align: center;"><span class="arithmatex">\(m/s^2\)</span></td>
+<td style="text-align: center;">_mps2</td>
+</tr>
+<tr>
+<td style="text-align: center;">newton</td>
+<td style="text-align: center;">_N</td>
+</tr>
+<tr>
+<td style="text-align: center;">pound</td>
+<td style="text-align: center;">_lb</td>
+</tr>
+<tr>
+<td style="text-align: center;">radian</td>
+<td style="text-align: center;">_rad</td>
+</tr>
+<tr>
+<td style="text-align: center;">radian per second</td>
+<td style="text-align: center;">_rads</td>
+</tr>
+<tr>
+<td style="text-align: center;">second</td>
+<td style="text-align: center;">_s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Iterators</strong></p>
+<p>Name iterators according to what you are iterating over:</p>
+<ul>
+<li>E.g.: iSpeed, iAlt</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Iterators</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="n">iSpeed</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nb">numel</span><span class="p">(</span><span class="n">speedMatrix</span><span class="p">)</span>
+<span class="w">    </span>#<span class="w"> </span><span class="n">Do</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="n">thing</span>
+<span class="k">end</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Descriptive names</strong></p>
+<p>Use name to express meaning:</p>
+<ul>
+<li>forceBodyAxis_N</li>
+</ul>
+<p>Avoid excessively long names:</p>
+<ul>
+<li>saturationUpperBoundary_deg</li>
+</ul>
+<p>How long should a name be:</p>
+<ul>
+<li>As long as necessary to immediately recognize what the variable is about:</li>
+<li>However:<ul>
+<li>Short names are more appropriate for small scopes</li>
+<li>For a large scope, consider a more descriptive name (potentially longer)</li>
+</ul>
+</li>
+</ul>
+<h2 id="function-arguments">Function arguments:</h2>
+<p><strong>Description</strong></p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Function arguments</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">function</span><span class="w"> </span>force_N<span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nf">getForce</span><span class="p">(</span>mass_kg, accel_mps2<span class="p">)</span>
+<span class="c">% [Description]:</span>
+<span class="c">%   - Calculates resulting force using Second Newton&#39;s law.</span>
+<span class="c">% [Inputs]:</span>
+<span class="c">%   - mass_kg: Body Mass</span>
+<span class="c">%   - accel_mps2: Body acceleration</span>
+<span class="c">% [Outputs]:</span>
+<span class="c">%   - force_N: resulting Force</span>
+
+<span class="n">force_N</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">mass_kg</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">accel_mps2</span><span class="p">;</span>
+
+<span class="k">end</span>
+</code></pre></div></td></tr></table></div>
+<p>If you are using optional arguments:</p>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Function arguments with options</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">function</span><span class="w"> </span>force_N<span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nf">getForce</span><span class="p">(</span>mass_kg, accel_mps2,varargin<span class="p">)</span>
+<span class="c">% [Description]:</span>
+<span class="c">%   - Calculates resulting force using Second Newton&#39;s law.</span>
+<span class="c">% [Inputs]:</span>
+<span class="c">%   - mass_kg: Body Mass</span>
+<span class="c">%   - accel_mps2: Body acceleration</span>
+<span class="c">% [Optional arguments]:</span>
+<span class="c">%   - optionA: Description option A;</span>
+<span class="c">%   - optionB: Description option B;</span>
+<span class="c">% [Outputs]:</span>
+<span class="c">%   - force_N: resulting Force</span>
+
+<span class="n">Do</span><span class="w"> </span><span class="s">your</span><span class="w"> </span><span class="s">thing</span>
+
+<span class="k">end</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Scalar or array</strong></p>
+<ul>
+<li>Prepare functions to receive both scalar or array**</li>
+</ul>
+<p><div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Example 1: Scalar or array</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">function</span><span class="w"> </span>force_N<span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nf">getForce</span><span class="p">(</span>mass_kg, accel_mps2<span class="p">)</span>
+<span class="w">    </span><span class="n">force_N</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">mass_kg</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">accel_mps2</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></td></tr></table></div>
+<strong>Complexity</strong></p>
+<p>Functions should have a single responsibility:</p>
+<ul>
+<li>E.g. A plotting function should plot (not convert multiple units, extract frequency response, etc.)</li>
+</ul>
+<p><strong>Optional arguments</strong></p>
+<ul>
+<li>Use the same matlab convention if you need optinal arguments;</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">Options</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">out</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">funcWithOptions</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                      </span><span class="n">arg2</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                      </span><span class="s">&#39;option1&#39;</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                      </span><span class="s">&#39;option2&#39;</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="k">...</span>
+<span class="w">                      </span><span class="s">&#39;option3&#39;</span><span class="p">,</span><span class="mf">1.0</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<p><strong>Argument consistency</strong></p>
+<ul>
+<li>There should be only one way to provide an argument.</li>
+</ul>
+<p><strong>The function interface is a contract:</strong></p>
+<ul>
+<li>Use the function description to define acceptable inputs;</li>
+<li>If the user disrespect the contract, an Error should not pass silently.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="../../../../../javascripts/katex.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/katex.min.js"></script>
+      
+        <script src="https://unpkg.com/katex@0/dist/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

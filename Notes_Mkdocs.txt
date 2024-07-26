@@ -1,0 +1,45 @@
+
+
+--------------------
+Virtual environment
+--------------------
+
+No windows:
+	Create:
+	python -m venv .venv
+	
+	Activate:
+	.venv\Scripts\activate
+	
+	Deactivate
+	deactivate
+	
+	Install mkdocs
+	pip install mkdocs
+	
+	
+	Update pip
+	python.exe -m pip install --upgrade pip
+	
+	To upgrade mkdocs
+	pip install mkdocs --upgrade
+	
+	
+--------------------
+Create project
+--------------------	
+	
+	
+	New project:
+	mkdocs new my-project
+	cd my-project
+	
+	Preview:
+	mkdocs serve
+	(available here: http://127.0.0.1:8000/
+	
+	Deploy:
+	mkdocs build
+	
+	
+	parei em: deploying
